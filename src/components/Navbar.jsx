@@ -1,10 +1,5 @@
 import ThemeToggleButton from "./ThemeToggleButton";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import AuthButton from "./AuthButton";
 
 const Navbar = () => {
   return (
@@ -16,13 +11,8 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
+          <AuthButton />
           <ThemeToggleButton />
-          <SignedOut>
-            <SignInButton className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-300 shadow-md hover:bg-gray-300 dark:hover:bg-gray-700" />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
         </div>
       </div>
     </nav>

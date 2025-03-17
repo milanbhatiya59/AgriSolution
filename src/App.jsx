@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import Navbar from "./components/Navbar";
+import CreatePage from "./pages/create/index";
 import HomePage from "./pages/home/index";
 import FarmPage from "./pages/farm/index";
 import PrivateRoute from "./components/PrivateRoute";
@@ -45,6 +46,15 @@ function App() {
               element={
                 <PrivateRoute>
                   <FarmPage />
+                </PrivateRoute>
+              }
+            />
+
+            <Route
+              path="/create"
+              element={
+                <PrivateRoute>
+                  <CreatePage />
                 </PrivateRoute>
               }
             />

@@ -42,7 +42,7 @@ function App() {
             />
 
             <Route
-              path="/:id"
+              path="/farm/:id"
               element={
                 <PrivateRoute>
                   <FarmPage />

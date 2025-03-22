@@ -2,76 +2,84 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import FarmCard from "./components/FarmCard";
+import { getUserFarmsApi } from "../../api/getUserFarmsApi";
 
 const HomePage = () => {
   const { user } = useUser();
   const [userData, setUserData] = useState(null);
+  const [farmsData, setFarmsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // Fetch user data from the backend when the component mounts
   useEffect(() => {
-    // if (user?.id) {
-    //   fetch(`/api/user/${user.id}`) // Replace with your actual backend endpoint
-    //     .then((response) => response.json())
-    //     .then((data) => setUserData(data))
-    //     .catch((error) => console.error("Error fetching user data:", error));
-    // }
-    setUserData({
-      farms: [
-        {
-          name: "Green Valley Farm",
-          location: "California, USA",
-          size: 150,
-        },
-        {
-          name: "Sunny Acres",
-          location: "Florida, USA",
-          size: 80,
-        },
-        {
-          name: "Mountain View Farms",
-          location: "Colorado, USA",
-          size: 220,
-        },
-        {
-          name: "Riverbend Organic Farm",
-          location: "Oregon, USA",
-          size: 120,
-        },
-        {
-          name: "Apple Orchard Estate",
-          location: "Washington, USA",
-          size: 50,
-        },
-      ],
-    });
-  }, [user?.id]);
+    if (!user?.id) return;
+
+    const fetchUserData = async () => {
+      setLoading(true);
+      try {
+        const response = await getUserFarmsApi(user.id);
+        setUserData(response.user);
+        setFarmsData(response.farms);
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError("Failed to load user data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+        {/* Header Section */}
         <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
           <div className="text-lg font-semibold">
-            👤 {user?.firstName}'s Information
+            👤 {user?.firstName} {user?.lastName}'s Profile
           </div>
           <button
             onClick={() => navigate("/create")}
-            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-lg shadow-md hover:bg-gray-300 dark:hover:bg-gray-700 transition"
+            className="px-4 py-2 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition"
           >
             + Create New Farm
           </button>
         </div>
 
+        {/* User Info */}
         <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          <div className="grid grid-cols-3 gap-4">
-            {userData ? (
-              userData.farms.map((farm) => (
-                <FarmCard key={farm.id} farm={farm} />
-              ))
-            ) : (
-              <div>Loading user farms...</div>
-            )}
-          </div>
+          {loading ? (
+            <div>Loading user data...</div>
+          ) : error ? (
+            <div className="text-red-500">{error}</div>
+          ) : userData ? (
+            <div>
+              <h2 className="text-xl font-bold mb-4">User Information</h2>
+              <p>
+                <strong>Email:</strong> {userData.email}
+              </p>
+            </div>
+          ) : (
+            <div>No user data available.</div>
+          )}
+        </div>
+
+        {/* User's Farms Section */}
+        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+          <h2 className="text-xl font-bold mb-4">Your Farms</h2>
+          {loading ? (
+            <div>Loading farms...</div>
+          ) : farmsData.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {farmsData.map((farm) => (
+                <FarmCard key={farm._id} farm={farm} />
+              ))}
+            </div>
+          ) : (
+            <div>No farms found. Create a new one!</div>
+          )}
         </div>
       </div>
     </div>

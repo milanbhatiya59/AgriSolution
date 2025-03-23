@@ -102,7 +102,6 @@ const CreatePage = () => {
 
     try {
       await createFarmApi(clerkUserId, finalData);
-      console.log("Farm Created Successfully");
       navigate("/");
     } catch (error) {
       console.error("Error submitting form:", error);

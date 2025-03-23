@@ -24,7 +24,7 @@ function App() {
       <Router>
         <Navbar />
         {loading ? (
-          <Skeleton />
+          <Loading />
         ) : (
           <Routes>
             <Route
@@ -67,16 +67,22 @@ function App() {
   );
 }
 
-const Skeleton = () => {
+const Loading = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen animate-pulse">
-      <div className="w-full h-full max-w-md p-6 rounded-lg bg-gray-200 dark:bg-gray-800 shadow-lg">
-        <div className="h-12 bg-gray-300 dark:bg-gray-600 rounded-md mb-4"></div>
-        <div className="h-10 bg-gray-300 dark:bg-gray-600 rounded-md mb-6"></div>
-        <div className="h-64 bg-gray-300 dark:bg-gray-600 rounded-md"></div>
-      </div>
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      {/* Spinner with better contrast & visibility */}
+      <div className="w-12 h-12 border-4 border-gray-300 dark:border-gray-600 border-t-transparent dark:border-t-white rounded-full animate-spin mb-4"></div>
+
+      {/* Loading Text with Animated Dots */}
+      <p className="text-gray-700 dark:text-white font-semibold text-lg flex space-x-1">
+        <span>Loading</span>
+        <span className="animate-bounce">.</span>
+        <span className="animate-bounce delay-150">.</span>
+        <span className="animate-bounce delay-300">.</span>
+      </p>
     </div>
   );
 };
+
 
 export default App;

@@ -40,8 +40,12 @@ const FarmPage = () => {
         <div className="flex flex-row items-start justify-center space-x-6">
           <FarmDetails farmData={farmData} />
           <div className="w-1/3 bg-yellow-100 dark:bg-gray-800 shadow-lg rounded-lg p-6">
-            <Warnings farmData={farmData} />
-            <Notifications />
+            <div className="mb-6">
+              <Warnings farmData={farmData} />
+            </div>
+            <div>
+              <Notifications id={id} />
+            </div>
           </div>
           <div className="w-1/3 bg-yellow-100 dark:bg-gray-800 shadow-lg rounded-lg p-6">
             <PestAndDiseaseDetection farmData={farmData} />

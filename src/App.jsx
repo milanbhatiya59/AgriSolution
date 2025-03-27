@@ -8,6 +8,7 @@ import FarmPage from "./pages/farm/index";
 import PrivateRoute from "./components/PrivateRoute";
 import NotFound from "./pages/NotFound";
 import LoginWarning from "./pages/LoginWarning";
+import Chatbot from "./components/ChatBot/index";
 import "./App.css";
 
 function App() {
@@ -62,6 +63,7 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         )}
+        <Chatbot />
       </Router>
     </div>
   );

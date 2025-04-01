@@ -71,7 +71,7 @@ const Chatbot = () => {
           {/* Header */}
           <div className="flex justify-between items-center p-4 bg-green-600 dark:bg-green-900 text-white">
             <div className="flex items-center gap-3">
-              <ChatbotIcon className="text-white" />
+              <ChatbotIcon />
               <h2 className="text-lg font-semibold">ChatBot</h2>
             </div>
             <button

@@ -69,9 +69,9 @@ const Chatbot = () => {
       {showChatbot && (
         <div className="fixed bottom-20 right-5 w-96 bg-white dark:bg-gray-900 shadow-xl rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
           {/* Header */}
-          <div className="flex justify-between items-center p-4 bg-gray-800 text-white">
+          <div className="flex justify-between items-center p-4 bg-green-600 dark:bg-green-900 text-white">
             <div className="flex items-center gap-3">
-              <ChatbotIcon />
+              <ChatbotIcon className="text-white" />
               <h2 className="text-lg font-semibold">ChatBot</h2>
             </div>
             <button

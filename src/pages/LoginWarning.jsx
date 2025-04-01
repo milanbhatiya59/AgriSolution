@@ -37,7 +37,9 @@ const LoginWarning = () => {
         <h1 className="text-6xl font-extrabold text-red-500 dark:text-red-400 mb-4 animate-bounce">
           ⚠️
         </h1>
-        <h2 className="text-3xl font-bold mb-3">Access Denied</h2>
+        <h2 className="text-3xl font-bold mb-3 text-black dark:text-white">
+          Access Denied
+        </h2>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
           You must be logged in to access this page.
         </p>

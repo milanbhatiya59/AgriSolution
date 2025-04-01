@@ -1,4 +1,4 @@
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { getSoilCardApiData } from "../../api/getSoilCardApiData";
 import { createFarmApi } from "../../api/createFarmApi";
@@ -15,38 +15,38 @@ const CreatePage = () => {
 
   const [formData, setFormData] = useState({
     soilHealthCard: {
-      soilHealthCardNo: "",
-      validityFrom: "",
-      validityTo: "",
+      SoilHealthCardNo: "",
+      ValidityFrom: "",
+      ValidityTo: "",
     },
     farmersDetails: {
-      name: "",
-      address: "",
-      village: "",
-      subDistrict: "",
-      district: "",
+      Name: "",
+      Address: "",
+      Village: "",
+      SubDistrict: "",
+      District: "",
       PIN: "",
     },
     soilSampleDetails: {
-      soilSampleNumber: "",
-      surveyNo: "",
-      farmSizeInHector: "",
-      geoPositionLatitude: "",
-      geoPositionLongitude: "",
+      SoilSampleNumber: "",
+      SurveyNo: "",
+      FarmSizeInHector: "",
+      GeoPositionLatitude: "",
+      GeoPositionLongitude: "",
     },
     soilTestResults: {
       pH: "",
       EC: "",
-      organicCarbon_OC: "",
-      availableNitrogen_N: "",
-      availablePhosphorus_P: "",
-      availablePotassium_K: "",
-      availableSulphur_S: "",
-      availableZinc_Zn: "",
-      availableBoron_B: "",
-      availableIron_Fe: "",
-      availableManganese_Mn: "",
-      availableCopper_Cu: "",
+      OrganicCarbonOC: "",
+      AvailableNitrogenN: "",
+      AvailablePhosphorusP: "",
+      AvailablePotassiumK: "",
+      AvailableSulphurS: "",
+      AvailableZincZn: "",
+      AvailableBoronB: "",
+      AvailableIronFe: "",
+      AvailableManganeseMn: "",
+      AvailableCopperCu: "",
     },
     currentCrop: "",
     fertilizerNeeded: [],
@@ -102,41 +102,57 @@ const CreatePage = () => {
 
     try {
       await createFarmApi(clerkUserId, finalData);
+      console.log("Farm Created Successfully");
       navigate("/");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
 
+  const handleDeleteImage = () => {
+    setImage(null);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        <div className="flex flex-col md:flex-row justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          <div className="text-lg font-semibold">Create Farm</div>
+        <div className="flex flex-col md:flex-row items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+          {/* Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition"
+          >
+            Back to Home
+          </button>
 
-          {/* Buttons Container */}
-          <div className="flex space-x-4">
-            {/* Back Button */}
-            <button
-              onClick={() => navigate(-1)}
-              className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition"
-            >
-              Back to Home
-            </button>
-
-            {/* Upload Button */}
-            <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition">
-              Upload SoilCard Image
-              <input
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleImageUpload}
-              />
-            </label>
+          {/* Create Farm Title */}
+          <div className="flex-1 text-center text-lg font-semibold">
+            Create Farm
           </div>
+
+          {/* Delete Soil Card Image Button */}
+          {image && (
+            <button
+              onClick={handleDeleteImage}
+              className="px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition mx-2"
+            >
+              Delete Soil Card Image
+            </button>
+          )}
+
+          {/* Upload Soil Card Image Button */}
+          <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 font-bold rounded-lg shadow-md hover:bg-blue-700 transition">
+            Upload Soil Card Image
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageUpload}
+            />
+          </label>
         </div>
 
+        {/* Display Uploaded Image */}
         {image && (
           <div className="flex justify-center">
             <img
@@ -147,58 +163,124 @@ const CreatePage = () => {
           </div>
         )}
 
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
         >
-          {/* General Farm Information */}
-          <div>
-            {["soilHealthCard", "farmersDetails", "soilSampleDetails"].map(
-              (section) => (
-                <div key={section}>
-                  <h2 className="text-lg font-semibold mb-4">
-                    {section.replace(/([A-Z])/g, " $1")}
-                  </h2>
-                  {Object.keys(formData[section]).map((field) => (
-                    <div key={field} className="mb-2">
-                      <label className="block text-sm font-medium mb-1">
-                        {field.replace(/([A-Z])/g, " $1")}
-                      </label>
-                      <input
-                        type="text"
-                        name={`${section}.${field}`}
-                        value={formData[section][field] || ""}
-                        onChange={handleChange}
-                        className="w-full p-2 border rounded"
-                      />
-                    </div>
-                  ))}
+          {/* Soil Health Card */}
+          <div className="md:col-span-3">
+            <h2 className="text-lg font-semibold mb-4">Soil Health Card</h2>
+            <div className="grid grid-cols-3 gap-4">
+              {Object.keys(formData.soilHealthCard).map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1">
+                    {field.replace(/([A-Z])/g, " $1")}
+                  </label>
+                  <input
+                    type={
+                      field === "ValidityFrom" || field === "ValidityTo"
+                        ? "date"
+                        : "text"
+                    }
+                    name={`soilHealthCard.${field}`}
+                    value={formData.soilHealthCard[field] || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
+                    required={
+                      field === "ValidityFrom" || field === "ValidityTo"
+                    }
+                    min={
+                      field === "ValidityTo"
+                        ? formData.soilHealthCard.ValidityFrom
+                        : ""
+                    }
+                  />
                 </div>
-              )
-            )}
+              ))}
+            </div>
+          </div>
+
+          {/* Farmers Details */}
+          <div className="md:col-span-3">
+            <h2 className="text-lg font-semibold mb-4">Farmers Details</h2>
+            <div className="grid grid-cols-3 gap-4">
+              {Object.keys(formData.farmersDetails).map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1">
+                    {field.replace(/([A-Z])/g, " $1")}
+                  </label>
+                  <input
+                    type="text"
+                    name={`farmersDetails.${field}`}
+                    value={formData.farmersDetails[field] || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
+                    required={[
+                      "Address",
+                      "Village",
+                      "District",
+                      "PIN",
+                    ].includes(field)}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Soil Sample Details */}
+          <div className="md:col-span-3">
+            <h2 className="text-lg font-semibold mb-4">Soil Sample Details</h2>
+            <div className="grid grid-cols-3 gap-4">
+              {Object.keys(formData.soilSampleDetails).map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1">
+                    {field.replace(/([A-Z])/g, " $1")}
+                  </label>
+                  <input
+                    type="text"
+                    name={`soilSampleDetails.${field}`}
+                    value={formData.soilSampleDetails[field] || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
+                    required={field === "FarmSizeInHector"}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Soil Test Results */}
-          <div>
+          <div className="md:col-span-3">
             <h2 className="text-lg font-semibold mb-4">Soil Test Results</h2>
-            {Object.keys(formData.soilTestResults).map((field) => (
-              <div key={field} className="mb-2">
-                <label className="block text-sm font-medium mb-1">
-                  {field.replace(/([A-Z])/g, " $1")}
-                </label>
-                <input
-                  type="text"
-                  name={`soilTestResults.${field}`}
-                  value={formData.soilTestResults[field] || ""}
-                  onChange={handleChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-            ))}
+            <div className="grid grid-cols-3 gap-4">
+              {Object.keys(formData.soilTestResults).map((field) => (
+                <div key={field}>
+                  <label className="block text-sm font-medium mb-1">
+                    {field.replace(/([A-Z])/g, " $1")}
+                  </label>
+                  <input
+                    type="text"
+                    name={`soilTestResults.${field}`}
+                    value={formData.soilTestResults[field] || ""}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
+                    required={[
+                      "pH",
+                      "EC",
+                      "OrganicCarbonOC",
+                      "AvailableNitrogenN",
+                      "AvailablePhosphorusP",
+                      "AvailablePotassiumK",
+                    ].includes(field)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
-          {/* Crop Recommendations & Fertilizer Suggestions */}
-          <div>
+          {/* Crop Recommendations */}
+          <div className="md:col-span-1">
             <h2 className="text-lg font-semibold mb-4">Crop Recommendations</h2>
             <label className="block text-sm font-medium mb-1">
               Select a Crop
@@ -207,7 +289,8 @@ const CreatePage = () => {
               name="currentCrop"
               value={formData.currentCrop}
               onChange={handleChange}
-              className="w-full p-2 border rounded"
+              className="w-full p-2 border rounded bg-green-200 dark:bg-green-700 focus:border-green-400 focus:ring-1 focus:ring-green-400 text-black"
+              required
             >
               <option value="">Select a Crop</option>
               {cropRecommendations.map((crop, index) => (
@@ -216,23 +299,9 @@ const CreatePage = () => {
                 </option>
               ))}
             </select>
-
-            {fertilizerNeeded.length > 0 && (
-              <div className="mt-4">
-                <h3 className="text-md font-semibold mb-2">
-                  Fertilizer Recommendations
-                </h3>
-                <ul className="list-disc pl-5">
-                  {fertilizerNeeded.map((fertilizer, index) => (
-                    <li key={index}>
-                      {fertilizer.name}: {fertilizer.quantity}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
           </div>
 
+          {/* Submit Button */}
           <button
             type="submit"
             className="col-span-full px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition"

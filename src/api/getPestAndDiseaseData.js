@@ -3,9 +3,8 @@ import { API_BASE_URL } from "./apiConstants";
 
 const getPestAndDiseaseData = async (formData, farmData) => {
   try {
-    // Append farmData to formData if needed
     if (farmData) {
-      formData.append("farmData", JSON.stringify(farmData)); // Convert object to string
+      formData.append("farmData", JSON.stringify(farmData));
     }
 
     const response = await axios.post(

@@ -1,17 +1,28 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getSoilCardApiData } from "../../api/getSoilCardApiData";
 import { createFarmApi } from "../../api/createFarmApi";
 import { useUser } from "@clerk/clerk-react";
+import { useLanguage } from "../../context/LanguageContext";
+import { translateText } from "../../utils/translate";
+
+import SoilHealthCardForm from "./components/SoilHealthCardForm";
+import FarmersDetailsForm from "./components/FarmersDetailsForm";
+import SoilSampleDetailsForm from "./components/SoilSampleDetailsForm";
+import SoilTestResultsForm from "./components/SoilTestResultsForm";
+import CropSelection from "./components/CropSelection";
+import FormActions from "./components/FormActions";
 
 const CreatePage = () => {
   const navigate = useNavigate();
   const { user } = useUser();
+  const { language } = useLanguage();
   const clerkUserId = user?.id || "";
 
   const [image, setImage] = useState(null);
   const [cropRecommendations, setCropRecommendations] = useState([]);
   const [fertilizerNeeded, setFertilizerNeeded] = useState([]);
+  const [translatedTexts, setTranslatedTexts] = useState({});
 
   const [formData, setFormData] = useState({
     soilHealthCard: {
@@ -51,6 +62,25 @@ const CreatePage = () => {
     currentCrop: "",
     fertilizerNeeded: [],
   });
+
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      const keys = {
+        backToHome: "Back to Home",
+        createFarm: "Create Farm",
+        deleteSoilCard: "Delete Soil Card Image",
+        uploadSoilCard: "Upload Soil Card Image",
+      };
+
+      const translated = {};
+      for (const key in keys) {
+        translated[key] = await translateText(keys[key], language);
+      }
+      setTranslatedTexts(translated);
+    };
+
+    fetchTranslations();
+  }, [language]);
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
@@ -117,32 +147,28 @@ const CreatePage = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div className="flex flex-col md:flex-row items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          {/* Back Button */}
           <button
             onClick={() => navigate(-1)}
             className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition"
           >
-            Back to Home
+            {translatedTexts.backToHome}
           </button>
 
-          {/* Create Farm Title */}
           <div className="flex-1 text-center text-lg font-semibold">
-            Create Farm
+            {translatedTexts.createFarm}
           </div>
 
-          {/* Delete Soil Card Image Button */}
           {image && (
             <button
               onClick={handleDeleteImage}
               className="px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition mx-2"
             >
-              Delete Soil Card Image
+              {translatedTexts.deleteSoilCard}
             </button>
           )}
 
-          {/* Upload Soil Card Image Button */}
           <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 font-bold rounded-lg shadow-md hover:bg-blue-700 transition">
-            Upload Soil Card Image
+            {translatedTexts.uploadSoilCard}
             <input
               type="file"
               accept="image/*"
@@ -152,7 +178,6 @@ const CreatePage = () => {
           </label>
         </div>
 
-        {/* Display Uploaded Image */}
         {image && (
           <div className="flex justify-center">
             <img
@@ -163,151 +188,26 @@ const CreatePage = () => {
           </div>
         )}
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
         >
-          {/* Soil Health Card */}
-          <div className="md:col-span-3">
-            <h2 className="text-lg font-semibold mb-4">Soil Health Card</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {Object.keys(formData.soilHealthCard).map((field) => (
-                <div key={field}>
-                  <label className="block text-sm font-medium mb-1">
-                    {field.replace(/([A-Z])/g, " $1")}
-                  </label>
-                  <input
-                    type={
-                      field === "ValidityFrom" || field === "ValidityTo"
-                        ? "date"
-                        : "text"
-                    }
-                    name={`soilHealthCard.${field}`}
-                    value={formData.soilHealthCard[field] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
-                    required={
-                      field === "ValidityFrom" || field === "ValidityTo"
-                    }
-                    min={
-                      field === "ValidityTo"
-                        ? formData.soilHealthCard.ValidityFrom
-                        : ""
-                    }
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Farmers Details */}
-          <div className="md:col-span-3">
-            <h2 className="text-lg font-semibold mb-4">Farmers Details</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {Object.keys(formData.farmersDetails).map((field) => (
-                <div key={field}>
-                  <label className="block text-sm font-medium mb-1">
-                    {field.replace(/([A-Z])/g, " $1")}
-                  </label>
-                  <input
-                    type="text"
-                    name={`farmersDetails.${field}`}
-                    value={formData.farmersDetails[field] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
-                    required={[
-                      "Address",
-                      "Village",
-                      "District",
-                      "PIN",
-                    ].includes(field)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Soil Sample Details */}
-          <div className="md:col-span-3">
-            <h2 className="text-lg font-semibold mb-4">Soil Sample Details</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {Object.keys(formData.soilSampleDetails).map((field) => (
-                <div key={field}>
-                  <label className="block text-sm font-medium mb-1">
-                    {field.replace(/([A-Z])/g, " $1")}
-                  </label>
-                  <input
-                    type="text"
-                    name={`soilSampleDetails.${field}`}
-                    value={formData.soilSampleDetails[field] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
-                    required={field === "FarmSizeInHector"}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Soil Test Results */}
-          <div className="md:col-span-3">
-            <h2 className="text-lg font-semibold mb-4">Soil Test Results</h2>
-            <div className="grid grid-cols-3 gap-4">
-              {Object.keys(formData.soilTestResults).map((field) => (
-                <div key={field}>
-                  <label className="block text-sm font-medium mb-1">
-                    {field.replace(/([A-Z])/g, " $1")}
-                  </label>
-                  <input
-                    type="text"
-                    name={`soilTestResults.${field}`}
-                    value={formData.soilTestResults[field] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border rounded focus:bg-green-100 text-black"
-                    required={[
-                      "pH",
-                      "EC",
-                      "OrganicCarbonOC",
-                      "AvailableNitrogenN",
-                      "AvailablePhosphorusP",
-                      "AvailablePotassiumK",
-                    ].includes(field)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Crop Recommendations */}
-          <div className="md:col-span-1">
-            <h2 className="text-lg font-semibold mb-4">Crop Recommendations</h2>
-            <label className="block text-sm font-medium mb-1">
-              Select a Crop
-            </label>
-            <select
-              name="currentCrop"
-              value={formData.currentCrop}
-              onChange={handleChange}
-              className="w-full p-2 border rounded bg-green-200 dark:bg-green-700 focus:border-green-400 focus:ring-1 focus:ring-green-400 text-black"
-              required
-            >
-              <option value="">Select a Crop</option>
-              {cropRecommendations.map((crop, index) => (
-                <option key={index} value={crop.cropName}>
-                  {crop.cropName}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="col-span-full px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition"
-          >
-            Submit
-          </button>
+          <SoilHealthCardForm formData={formData} handleChange={handleChange} />
+          <FarmersDetailsForm formData={formData} handleChange={handleChange} />
+          <SoilSampleDetailsForm
+            formData={formData}
+            handleChange={handleChange}
+          />
+          <SoilTestResultsForm
+            formData={formData}
+            handleChange={handleChange}
+          />
+          <CropSelection
+            formData={formData}
+            handleChange={handleChange}
+            cropRecommendations={cropRecommendations}
+          />
+          <FormActions handleSubmit={handleSubmit} />
         </form>
       </div>
     </div>

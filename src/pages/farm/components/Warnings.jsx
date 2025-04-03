@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import { getWarning } from "../../../api/getWarning";
 import { AlertTriangle } from "lucide-react";
+import { useLanguage } from "../../../context/LanguageContext";
+import { translateText } from "../../../utils/translate";
 
 const Warning = ({ farmData }) => {
   const [warning, setWarning] = useState(null);
+  const { language } = useLanguage();
+  const [translatedTitle, setTranslatedTitle] = useState("Warnings");
+  const [translatedWarning, setTranslatedWarning] = useState(null);
 
   useEffect(() => {
     if (!farmData) return;
@@ -20,53 +25,45 @@ const Warning = ({ farmData }) => {
     fetchWarning();
   }, [farmData]);
 
-  if (!farmData) {
-    return (
-      <div className="w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-        <p className="text-gray-700 dark:text-gray-300">Loading...</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const translateContent = async () => {
+      const titleTranslation = await translateText("Warnings", language);
+      setTranslatedTitle(titleTranslation);
+
+      if (warning) {
+        const translatedData = {
+          weather: warning.weather
+            ? await translateText(warning.weather, language)
+            : null,
+          soilHealth: warning.soilHealth
+            ? await translateText(warning.soilHealth, language)
+            : null,
+          cropHealth: warning.cropHealth
+            ? await translateText(warning.cropHealth, language)
+            : null,
+        };
+
+        setTranslatedWarning(translatedData);
+      }
+    };
+
+    translateContent();
+  }, [language, warning]);
 
   return (
     <div className="bg-red-100 dark:bg-red-900 shadow-lg rounded-lg p-6 border-l-8 border-red-700">
       <h2 className="text-2xl font-bold text-red-800 dark:text-red-400 flex items-center">
-        <AlertTriangle className="w-6 h-6 mr-2" /> Warnings
+        <AlertTriangle className="w-6 h-6 mr-2" /> {translatedTitle}
       </h2>
 
-      {warning ? (
+      {translatedWarning ? (
         <div className="space-y-4 mt-4">
-          {warning.weather && (
-            <div className="bg-red-200 dark:bg-red-800 p-4 rounded-md shadow">
-              <h3 className="font-semibold text-red-900 dark:text-red-300">
-                ⚠️ Weather Warning:
-              </h3>
-              <p className="text-red-700 dark:text-red-400">
-                {warning.weather}
-              </p>
-            </div>
+          {translatedWarning.weather && <p>⚠️ {translatedWarning.weather}</p>}
+          {translatedWarning.soilHealth && (
+            <p>⚠️ {translatedWarning.soilHealth}</p>
           )}
-
-          {warning.soilHealth && (
-            <div className="bg-red-200 dark:bg-red-800 p-4 rounded-md shadow">
-              <h3 className="font-semibold text-red-900 dark:text-red-300">
-                ⚠️ Soil Health Warning:
-              </h3>
-              <p className="text-red-700 dark:text-red-400">
-                {warning.soilHealth}
-              </p>
-            </div>
-          )}
-
-          {warning.cropHealth && (
-            <div className="bg-red-200 dark:bg-red-800 p-4 rounded-md shadow">
-              <h3 className="font-semibold text-red-900 dark:text-red-300">
-                ⚠️ Crop Health Warning:
-              </h3>
-              <p className="text-red-700 dark:text-red-400">
-                {warning.cropHealth}
-              </p>
-            </div>
+          {translatedWarning.cropHealth && (
+            <p>⚠️ {translatedWarning.cropHealth}</p>
           )}
         </div>
       ) : (

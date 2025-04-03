@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getPestAndDiseaseData } from "../../../api/getPestAndDiseaseData";
+import { useLanguage } from "../../../context/LanguageContext";
+import { translateText } from "../../../utils/translate";
 
 const PestAndDiseaseDetection = ({ farmData }) => {
+  const { language } = useLanguage();
   const [selectedImage, setSelectedImage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [pestAndDiseaseData, setPestAndDiseaseData] = useState(null);
+  const [translatedData, setTranslatedData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Allowed file types
+  const [translatedTexts, setTranslatedTexts] = useState({
+    title: "Pest & Disease Detection",
+    analyzeButton: "Analyze Image",
+    analyzing: "Analyzing...",
+    processing: "Processing...",
+    healthyCrop: "✅ No pests or diseases detected. The crop appears healthy.",
+    affectedCrops: "Affected Crops:",
+    symptoms: "Symptoms:",
+    controlMeasures: "Control Measures:",
+    organicMethods: "🌱 Organic Methods:",
+    chemicalMethods: "💊 Chemical Methods:",
+    invalidFile: "Invalid file type! Please upload a valid image.",
+    selectImage: "Please select an image first.",
+    fetchError: "Failed to fetch data. Please try again.",
+  });
+
   const allowedFileTypes = [
     "image/jpeg",
     "image/png",
@@ -17,166 +36,178 @@ const PestAndDiseaseDetection = ({ farmData }) => {
     "image/webp",
   ];
 
-  // Handle Image Selection
   const handleImageChange = (event) => {
     const file = event.target.files[0];
-
     if (!file) return;
-
     if (!allowedFileTypes.includes(file.type)) {
-      setError("Invalid file type! Please upload a valid image.");
+      setError(translatedTexts.invalidFile);
       return;
     }
-
     setError(null);
     setSelectedImage(file);
     setPreviewImage(URL.createObjectURL(file));
     setPestAndDiseaseData(null);
+    setTranslatedData(null);
   };
 
-  // Handle Image Upload and Fetch Analysis
   const handleUpload = async () => {
     if (!selectedImage) {
-      setError("Please select an image first.");
+      setError(translatedTexts.selectImage);
       return;
     }
-
     setLoading(true);
     setError(null);
     setPestAndDiseaseData(null);
-
+    setTranslatedData(null);
     try {
       const formData = new FormData();
-      formData.append("image", selectedImage); // ✅ Ensure 'image' key matches backend expectation
-
-      // Call the backend API
+      formData.append("image", selectedImage);
       const response = await getPestAndDiseaseData(formData, farmData);
-
       setPestAndDiseaseData(response);
     } catch (error) {
-      setError("Failed to fetch data. Please try again.");
+      setError(translatedTexts.fetchError);
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  return (
-    <div className="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
-        Pest & Disease Detection
-      </h2>
+  useEffect(() => {
+    const translateUI = async () => {
+      const updatedTexts = {};
+      for (const key in translatedTexts) {
+        updatedTexts[key] = await translateText(translatedTexts[key], language);
+      }
+      setTranslatedTexts(updatedTexts);
+    };
+    translateUI();
+  }, [language]);
 
-      {/* Image Upload */}
+  useEffect(() => {
+    const translateDiseaseData = async () => {
+      if (!pestAndDiseaseData) return;
+      const translated = {
+        ...pestAndDiseaseData,
+        analysis: {
+          ...pestAndDiseaseData.analysis,
+          name: await translateText(pestAndDiseaseData.analysis.name, language),
+          description: await translateText(
+            pestAndDiseaseData.analysis.description,
+            language
+          ),
+          affected_crops: await Promise.all(
+            pestAndDiseaseData.analysis.affected_crops.map((crop) =>
+              translateText(crop, language)
+            )
+          ),
+          symptoms: await Promise.all(
+            pestAndDiseaseData.analysis.symptoms.map((symptom) =>
+              translateText(symptom, language)
+            )
+          ),
+          control_measures: {
+            organic: await Promise.all(
+              pestAndDiseaseData.analysis.control_measures.organic.map(
+                (method) => translateText(method, language)
+              )
+            ),
+            chemical: await Promise.all(
+              pestAndDiseaseData.analysis.control_measures.chemical.map(
+                (method) => translateText(method, language)
+              )
+            ),
+          },
+        },
+      };
+      setTranslatedData(translated);
+    };
+    translateDiseaseData();
+  }, [pestAndDiseaseData, language]);
+
+  return (
+    <div className="p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
+      <h2 className="text-3xl font-bold mb-5 text-gray-900 dark:text-gray-100">
+        {translatedTexts.title}
+      </h2>
       <input
         type="file"
         accept="image/*"
         onChange={handleImageChange}
-        className="mb-4"
+        className="mb-4 block"
       />
-
-      {/* Image Preview */}
       {previewImage && (
-        <div className="mb-4">
-          <img
-            src={previewImage}
-            alt="Selected"
-            className="w-48 h-48 object-cover rounded-md"
-          />
-        </div>
+        <img
+          src={previewImage}
+          alt="Selected"
+          className="w-52 h-52 object-cover rounded-lg mb-4"
+        />
       )}
-
-      {/* Upload Button */}
       <button
         onClick={handleUpload}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
         disabled={loading}
       >
-        {loading ? "Analyzing..." : "Analyze Image"}
+        {loading ? translatedTexts.analyzing : translatedTexts.analyzeButton}
       </button>
-
-      {/* Error Message */}
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-
-      {/* Loading Indicator */}
+      {error && <p className="text-red-500 mt-3">{error}</p>}
       {loading && (
-        <p className="text-gray-700 dark:text-gray-300 mt-2">Processing...</p>
+        <p className="text-gray-700 dark:text-gray-300 mt-3">
+          {translatedTexts.processing}
+        </p>
       )}
-
-      {/* Display Analysis Data */}
-      {pestAndDiseaseData && (
+      {translatedData && (
         <div className="mt-6">
-          {pestAndDiseaseData.analysis.type === "healthy" ? (
+          {translatedData.analysis.type === "healthy" ? (
             <p className="text-green-600 font-medium">
-              ✅ No pests or diseases detected. The crop appears healthy.
+              {translatedTexts.healthyCrop}
             </p>
           ) : (
             <div>
               <h3 className="text-xl font-semibold text-red-500">
-                {pestAndDiseaseData.analysis.name}
+                {translatedData.analysis.name}
               </h3>
               <p className="text-gray-700 dark:text-gray-300 mt-2">
-                {pestAndDiseaseData.analysis.description}
+                {translatedData.analysis.description}
               </p>
-
-              {/* Affected Crops */}
-              {pestAndDiseaseData.analysis.affected_crops?.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    Affected Crops:
-                  </h4>
-                  <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
-                    {pestAndDiseaseData.analysis.affected_crops.map(
-                      (crop, index) => (
-                        <li key={index}>{crop}</li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
-
-              {/* Symptoms */}
-              {pestAndDiseaseData.analysis.symptoms?.length > 0 && (
-                <div className="mt-4">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                    Symptoms:
-                  </h4>
-                  <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
-                    {pestAndDiseaseData.analysis.symptoms.map(
-                      (symptom, index) => (
-                        <li key={index}>{symptom}</li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              )}
-
-              {/* Control Measures */}
-              <div className="mt-4">
-                <h4 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  Control Measures:
-                </h4>
-                <p className="font-medium text-blue-500 mt-2">
-                  🌱 Organic Methods:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
-                  {pestAndDiseaseData.analysis.control_measures?.organic.map(
-                    (method, index) => (
-                      <li key={index}>{method}</li>
-                    )
-                  )}
-                </ul>
-                <p className="font-medium text-red-500 mt-2">
-                  💊 Chemical Methods:
-                </p>
-                <ul className="list-disc list-inside text-gray-700 dark:text-gray-300">
-                  {pestAndDiseaseData.analysis.control_measures?.chemical.map(
-                    (method, index) => (
-                      <li key={index}>{method}</li>
-                    )
-                  )}
-                </ul>
-              </div>
+              <h4 className="text-lg font-semibold mt-4">
+                {translatedTexts.affectedCrops}
+              </h4>
+              <ul className="list-disc list-inside">
+                {translatedData.analysis.affected_crops.map((crop, i) => (
+                  <li key={i}>{crop}</li>
+                ))}
+              </ul>
+              <h4 className="text-lg font-semibold mt-4">
+                {translatedTexts.symptoms}
+              </h4>
+              <ul className="list-disc list-inside">
+                {translatedData.analysis.symptoms.map((symptom, i) => (
+                  <li key={i}>{symptom}</li>
+                ))}
+              </ul>
+              <h4 className="text-lg font-semibold mt-4">
+                {translatedTexts.controlMeasures}
+              </h4>
+              <p className="font-medium text-blue-500 mt-2">
+                {translatedTexts.organicMethods}
+              </p>
+              <ul className="list-disc list-inside">
+                {translatedData.analysis.control_measures.organic.map(
+                  (method, i) => (
+                    <li key={i}>{method}</li>
+                  )
+                )}
+              </ul>
+              <p className="font-medium text-red-500 mt-2">
+                {translatedTexts.chemicalMethods}
+              </p>
+              <ul className="list-disc list-inside">
+                {translatedData.analysis.control_measures.chemical.map(
+                  (method, i) => (
+                    <li key={i}>{method}</li>
+                  )
+                )}
+              </ul>
             </div>
           )}
         </div>
@@ -184,5 +215,4 @@ const PestAndDiseaseDetection = ({ farmData }) => {
     </div>
   );
 };
-
 export default PestAndDiseaseDetection;

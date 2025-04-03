@@ -1,13 +1,35 @@
+import { useState, useEffect } from "react";
+import { useLanguage } from "../context/LanguageContext";
+import { translateText } from "../utils/translate";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
 
 const LoginWarning = () => {
+  const { language } = useLanguage();
+  const [translatedText, setTranslatedText] = useState({
+    title: "Access Denied",
+    message: "You must be logged in to access this page.",
+  });
+
+  useEffect(() => {
+    const fetchTranslations = async () => {
+      const title = await translateText("Access Denied", language);
+      const message = await translateText(
+        "You must be logged in to access this page.",
+        language
+      );
+      setTranslatedText({ title, message });
+    };
+
+    fetchTranslations();
+  }, [language]);
+
   const images = [
     "/img/agri1.jpg",
     "/img/agri3.jpg",
-    "/img/agri4.jpg!d",
+    "/img/agri4.jpg",
     "/img/agri5.jpg",
   ];
 
@@ -38,10 +60,10 @@ const LoginWarning = () => {
           ⚠️
         </h1>
         <h2 className="text-3xl font-bold mb-3 text-black dark:text-white">
-          Access Denied
+          {translatedText.title}
         </h2>
         <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-          You must be logged in to access this page.
+          {translatedText.message}
         </p>
       </div>
     </div>

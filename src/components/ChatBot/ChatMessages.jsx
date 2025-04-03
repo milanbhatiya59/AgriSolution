@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ChatbotIcon from "./ChatbotIcon";
+import { useLanguage } from "../../context/LanguageContext";
+import { translateText } from "../../utils/translate";
 
 const ChatMessage = ({ chat }) => {
+  const { language } = useLanguage();
+  const [translatedText, setTranslatedText] = useState(chat.text);
+
+  useEffect(() => {
+    const translateMessage = async () => {
+      if (chat.text) {
+        const translated = await translateText(chat.text, language);
+        setTranslatedText(translated);
+      }
+    };
+    translateMessage();
+  }, [chat.text, language]);
+
   return (
     <div
       className={`flex items-start gap-2 ${
@@ -14,7 +29,7 @@ const ChatMessage = ({ chat }) => {
           chat.isError ? "bg-red-500 text-black dark:text-white" : ""
         }`}
       >
-        {chat.text}
+        {translatedText}
       </p>
     </div>
   );

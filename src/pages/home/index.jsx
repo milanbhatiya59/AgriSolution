@@ -6,6 +6,8 @@ import { getUserFarmsApi } from "../../api/getUserFarmsApi";
 import { translateText } from "../../utils/translate";
 import { useLanguage } from "../../context/LanguageContext";
 
+import bannerImage from "../../assets/icon.png";
+
 const HomePage = () => {
   const { user } = useUser();
   const { language } = useLanguage();
@@ -67,55 +69,64 @@ const HomePage = () => {
   }, [language]);
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          <div className="text-lg font-semibold">
-            👤 {user?.firstName} {user?.lastName} - {translatedText.profile}
+    <>
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+          <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+            <div className="text-lg font-semibold">
+              👤 {user?.firstName} {user?.lastName} - {translatedText.profile}
+            </div>
+            <button
+              onClick={() => navigate("/create")}
+              className="px-4 py-2 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition"
+            >
+              {translatedText.createFarm}
+            </button>
           </div>
-          <button
-            onClick={() => navigate("/create")}
-            className="px-4 py-2 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition"
-          >
-            {translatedText.createFarm}
-          </button>
-        </div>
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+            <img
+              src={bannerImage}
+              alt="Welcome Banner"
+              className="w-full h-64 object-cover"
+            />
+          </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          {loading ? (
-            <div>{translatedText.loading}</div>
-          ) : error ? (
-            <div className="text-red-500">{error}</div>
-          ) : userData ? (
-            <div>
-              <h2 className="text-xl font-bold mb-4">
-                {translatedText.userInfo}
-              </h2>
-              <p>
-                <strong>{translatedText.email}:</strong> {userData.email}
-              </p>
-            </div>
-          ) : (
-            <div>{translatedText.noData}</div>
-          )}
-        </div>
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+            {loading ? (
+              <div>{translatedText.loading}</div>
+            ) : error ? (
+              <div className="text-red-500">{error}</div>
+            ) : userData ? (
+              <div>
+                <h2 className="text-xl font-bold mb-4">
+                  {translatedText.userInfo}
+                </h2>
+                <p>
+                  <strong>{translatedText.email}:</strong> {userData.email}
+                </p>
+              </div>
+            ) : (
+              <div>{translatedText.noData}</div>
+            )}
+          </div>
 
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-          <h2 className="text-xl font-bold mb-4">{translatedText.farms}</h2>
-          {loading ? (
-            <div>{translatedText.loading}</div>
-          ) : farmsData.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {farmsData.map((farm) => (
-                <FarmCard key={farm._id} farm={farm} />
-              ))}
-            </div>
-          ) : (
-            <div>{translatedText.noFarms}</div>
-          )}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+            <h2 className="text-xl font-bold mb-4">{translatedText.farms}</h2>
+            {loading ? (
+              <div>{translatedText.loading}</div>
+            ) : farmsData.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {farmsData.map((farm) => (
+                  <FarmCard key={farm._id} farm={farm} />
+                ))}
+              </div>
+            ) : (
+              <div>{translatedText.noFarms}</div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

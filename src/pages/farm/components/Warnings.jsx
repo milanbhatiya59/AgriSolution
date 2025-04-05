@@ -51,23 +51,36 @@ const Warning = ({ farmData }) => {
   }, [language, warning]);
 
   return (
-    <div className="bg-red-100 dark:bg-red-900 shadow-lg rounded-lg p-6 border-l-8 border-red-700">
-      <h2 className="text-2xl font-bold text-red-800 dark:text-red-400 flex items-center">
-        <AlertTriangle className="w-6 h-6 mr-2" /> {translatedTitle}
+    <div className="bg-white dark:bg-gray-800 border border-red-300 dark:border-red-500/70 rounded-xl shadow-md p-6">
+      <h2 className="text-2xl font-bold text-red-700 dark:text-red-300 flex items-center mb-4">
+        <AlertTriangle className="w-6 h-6 mr-2 text-red-600 dark:text-red-400" />
+        {translatedTitle}
       </h2>
 
-      {translatedWarning ? (
-        <div className="space-y-4 mt-4">
-          {translatedWarning.weather && <p>⚠️ {translatedWarning.weather}</p>}
+      {translatedWarning && (
+        <div className="space-y-4">
+          {translatedWarning.weather && (
+            <div className="bg-red-100 dark:bg-red-800/30 text-red-900 dark:text-red-200 p-4 rounded-md shadow-sm border-l-4 border-red-500 dark:border-red-400/70">
+              ⚠️ {translatedWarning.weather}
+            </div>
+          )}
           {translatedWarning.soilHealth && (
-            <p>⚠️ {translatedWarning.soilHealth}</p>
+            <div className="bg-red-100 dark:bg-red-800/30 text-red-900 dark:text-red-200 p-4 rounded-md shadow-sm border-l-4 border-red-500 dark:border-red-400/70">
+              ⚠️ {translatedWarning.soilHealth}
+            </div>
           )}
           {translatedWarning.cropHealth && (
-            <p>⚠️ {translatedWarning.cropHealth}</p>
+            <div className="bg-red-100 dark:bg-red-800/30 text-red-900 dark:text-red-200 p-4 rounded-md shadow-sm border-l-4 border-red-500 dark:border-red-400/70">
+              ⚠️ {translatedWarning.cropHealth}
+            </div>
           )}
         </div>
-      ) : (
-        <p className="text-red-700 dark:text-red-400">No warnings available.</p>
+      )}
+
+      {!translatedWarning || (!translatedWarning.weather && !translatedWarning.soilHealth && !translatedWarning.cropHealth) && (
+        <p className="text-gray-700 dark:text-gray-300 mt-4">
+          No warnings available.
+        </p>
       )}
     </div>
   );

@@ -51,7 +51,7 @@ const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
       />
       <button
         type="submit"
-        className="text-white bg-primary hover:bg-primary-dark p-2 rounded-full transition duration-200"
+        className="dark:text-white text-black bg-primary hover:bg-primary-dark p-2 rounded-full transition duration-200"
         aria-label="Send message"
       >
         <FaArrowUp className="w-5 h-5" />

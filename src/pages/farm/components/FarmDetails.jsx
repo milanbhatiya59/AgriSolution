@@ -128,59 +128,36 @@ const FarmDetails = ({ farmData }) => {
 
   return (
     <div className="w-2/3 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
-      <p className="text-lg mb-6">
-        Viewing details for Farm ID:{" "}
-        <strong className="text-blue-600">{farmData.id || "N/A"}</strong>
-      </p>
-
       {/* Farmer Details */}
       <h2 className="text-2xl font-semibold mb-4 text-blue-600">
         {translatedLabels.farmerDetails}
       </h2>
       {renderFieldGroup([
-        { label: translatedLabels.name, value: translatedData.farmersDetails.name },
-        { label: translatedLabels.address, value: translatedData.farmersDetails.address },
-        { label: translatedLabels.village, value: translatedData.farmersDetails.village },
-        { label: translatedLabels.subDistrict, value: translatedData.farmersDetails.subDistrict },
-        { label: translatedLabels.district, value: translatedData.farmersDetails.district },
-        { label: translatedLabels.pin, value: translatedData.farmersDetails.PIN },
+        {
+          label: translatedLabels.name,
+          value: translatedData.farmersDetails.name,
+        },
+        {
+          label: translatedLabels.address,
+          value: translatedData.farmersDetails.address,
+        },
+        {
+          label: translatedLabels.village,
+          value: translatedData.farmersDetails.village,
+        },
+        {
+          label: translatedLabels.subDistrict,
+          value: translatedData.farmersDetails.subDistrict,
+        },
+        {
+          label: translatedLabels.district,
+          value: translatedData.farmersDetails.district,
+        },
+        {
+          label: translatedLabels.pin,
+          value: translatedData.farmersDetails.PIN,
+        },
       ])}
-
-      {/* Soil Health Card */}
-      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
-        {translatedLabels.soilHealthCard}
-      </h2>
-      {renderFieldGroup([
-        { label: translatedLabels.cardNumber, value: translatedData.soilHealthCard.soilHealthCardNo },
-        { label: translatedLabels.validity, value: `${translatedData.soilHealthCard.validityFrom} - ${translatedData.soilHealthCard.validityTo}` },
-      ])}
-
-      {/* Soil Sample Details */}
-      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
-        {translatedLabels.soilSampleDetails}
-      </h2>
-      {renderFieldGroup([
-        { label: translatedLabels.sampleNumber, value: translatedData.soilSampleDetails.soilSampleNumber },
-        { label: translatedLabels.surveyNumber, value: translatedData.soilSampleDetails.surveyNo },
-        { label: translatedLabels.farmSize, value: translatedData.soilSampleDetails.farmSizeInHector },
-        { label: translatedLabels.latitude, value: translatedData.soilSampleDetails.geoPositionLatitude },
-        { label: translatedLabels.longitude, value: translatedData.soilSampleDetails.geoPositionLongitude },
-      ])}
-
-      {/* Soil Test Results */}
-      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
-        {translatedLabels.soilTestResults}
-      </h2>
-      {Object.keys(translatedData.soilTestResults).length > 0 ? (
-        renderFieldGroup(
-          Object.entries(translatedData.soilTestResults).map(([key, value]) => ({
-            label: key.replace(/_/g, " "),
-            value: value ?? "N/A",
-          }))
-        )
-      ) : (
-        <p>{translatedLabels.noTestResults}</p>
-      )}
 
       {/* Current Crop */}
       <h2 className="text-2xl font-semibold mt-6 mb-4 text-blue-600">
@@ -205,6 +182,65 @@ const FarmDetails = ({ farmData }) => {
         )
       ) : (
         <p>{translatedLabels.noFertilizer}</p>
+      )}
+
+      {/* Soil Health Card */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
+        {translatedLabels.soilHealthCard}
+      </h2>
+      {renderFieldGroup([
+        {
+          label: translatedLabels.cardNumber,
+          value: translatedData.soilHealthCard.soilHealthCardNo,
+        },
+        {
+          label: translatedLabels.validity,
+          value: `${translatedData.soilHealthCard.validityFrom} - ${translatedData.soilHealthCard.validityTo}`,
+        },
+      ])}
+
+      {/* Soil Sample Details */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
+        {translatedLabels.soilSampleDetails}
+      </h2>
+      {renderFieldGroup([
+        {
+          label: translatedLabels.sampleNumber,
+          value: translatedData.soilSampleDetails.soilSampleNumber,
+        },
+        {
+          label: translatedLabels.surveyNumber,
+          value: translatedData.soilSampleDetails.surveyNo,
+        },
+        {
+          label: translatedLabels.farmSize,
+          value: translatedData.soilSampleDetails.farmSizeInHector,
+        },
+        {
+          label: translatedLabels.latitude,
+          value: translatedData.soilSampleDetails.geoPositionLatitude,
+        },
+        {
+          label: translatedLabels.longitude,
+          value: translatedData.soilSampleDetails.geoPositionLongitude,
+        },
+      ])}
+
+      {/* Soil Test Results */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
+        {translatedLabels.soilTestResults}
+      </h2>
+      {Object.keys(translatedData.soilTestResults).length > 0 ? (
+        renderFieldGroup(
+          Object.entries(translatedData.soilTestResults).map(
+            ([key, value]) => ({
+              label: key.replace(/_/g, " "),
+              value: value ?? "N/A",
+            })
+          )
+        )
+      ) : (
+        <p>{translatedLabels.noTestResults}</p>
       )}
     </div>
   );

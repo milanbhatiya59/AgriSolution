@@ -10,6 +10,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import NotFound from "./pages/NotFound";
 import LoginWarning from "./pages/LoginWarning";
 import Chatbot from "./components/ChatBot/index";
+import CommunityPage from "./pages/community/index";
 import "./App.css";
 
 function App() {
@@ -55,6 +56,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <CreatePage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/community"
+                element={
+                  <PrivateRoute>
+                    <CommunityPage />
                   </PrivateRoute>
                 }
               />

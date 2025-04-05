@@ -1,6 +1,7 @@
 import ThemeToggleButton from "./ThemeToggleButton";
 import LanguageSelector from "./LanguageSelector";
 import AuthButton from "./AuthButton";
+import CommunityChatButton from "./CommunityChatButton";
 
 const Navbar = () => {
   return (
@@ -14,6 +15,7 @@ const Navbar = () => {
           <AuthButton />
           <ThemeToggleButton />
           <LanguageSelector />
+          <CommunityChatButton />
         </div>
       </div>
     </nav>

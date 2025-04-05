@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getSoilCardApiData } from "../../api/getSoilCardApiData";
-import { createFarmApi } from "../../api/createFarmApi";
+import { createFarm } from "../../api/createFarmApi";
 import { useUser } from "@clerk/clerk-react";
 import { useLanguage } from "../../context/LanguageContext";
 import { translateText } from "../../utils/translate";
-
 import SoilHealthCardForm from "./components/SoilHealthCardForm";
 import FarmersDetailsForm from "./components/FarmersDetailsForm";
 import SoilSampleDetailsForm from "./components/SoilSampleDetailsForm";
@@ -131,7 +130,7 @@ const CreatePage = () => {
     };
 
     try {
-      await createFarmApi(clerkUserId, finalData);
+      await createFarm(clerkUserId, finalData);
       console.log("Farm Created Successfully");
       navigate("/");
     } catch (error) {

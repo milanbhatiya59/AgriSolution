@@ -1,11 +1,11 @@
 import axios from "axios";
 import { API_BASE_URL } from "./apiConstants";
 
-const createFarm = async (clerkUserId, farmData) => {
+const createCommunity = async (clerkUserId, communityName) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/farm/create`, {
+    const response = await axios.post(`${API_BASE_URL}/community/create`, {
       ownerClerkId: clerkUserId,
-      ...farmData,
+      communityName: communityName,
     });
 
     return response.data.data;
@@ -15,4 +15,4 @@ const createFarm = async (clerkUserId, farmData) => {
   }
 };
 
-export { createFarm };
+export { createCommunity };

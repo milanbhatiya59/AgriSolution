@@ -108,106 +108,101 @@ const FarmDetails = ({ farmData }) => {
     );
   }
 
+  const renderFieldGroup = (fields) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+      {fields.map(({ label, value }, index) => (
+        <div
+          key={index}
+          className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm"
+        >
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+            {label}
+          </p>
+          <p className="text-lg font-semibold text-gray-900 dark:text-white">
+            {value}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className="w-2/3 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
       <p className="text-lg mb-6">
-        Viewing details for Farm ID: <strong>{farmData.id || "N/A"}</strong>
+        Viewing details for Farm ID:{" "}
+        <strong className="text-blue-600">{farmData.id || "N/A"}</strong>
       </p>
 
-      <h2 className="text-2xl font-semibold mb-4">
+      {/* Farmer Details */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
         {translatedLabels.farmerDetails}
       </h2>
-      <p>
-        <strong>{translatedLabels.name}:</strong>{" "}
-        {translatedData.farmersDetails.name}
-      </p>
-      <p>
-        <strong>{translatedLabels.address}:</strong>{" "}
-        {translatedData.farmersDetails.address}
-      </p>
-      <p>
-        <strong>{translatedLabels.village}:</strong>{" "}
-        {translatedData.farmersDetails.village}
-      </p>
-      <p>
-        <strong>{translatedLabels.subDistrict}:</strong>{" "}
-        {translatedData.farmersDetails.subDistrict}
-      </p>
-      <p>
-        <strong>{translatedLabels.district}:</strong>{" "}
-        {translatedData.farmersDetails.district}
-      </p>
-      <p>
-        <strong>{translatedLabels.pin}:</strong>{" "}
-        {translatedData.farmersDetails.PIN}
-      </p>
+      {renderFieldGroup([
+        { label: translatedLabels.name, value: translatedData.farmersDetails.name },
+        { label: translatedLabels.address, value: translatedData.farmersDetails.address },
+        { label: translatedLabels.village, value: translatedData.farmersDetails.village },
+        { label: translatedLabels.subDistrict, value: translatedData.farmersDetails.subDistrict },
+        { label: translatedLabels.district, value: translatedData.farmersDetails.district },
+        { label: translatedLabels.pin, value: translatedData.farmersDetails.PIN },
+      ])}
 
-      <h2 className="text-2xl font-semibold mt-6 mb-4">
+      {/* Soil Health Card */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
         {translatedLabels.soilHealthCard}
       </h2>
-      <p>
-        <strong>{translatedLabels.cardNumber}:</strong>{" "}
-        {translatedData.soilHealthCard.soilHealthCardNo}
-      </p>
-      <p>
-        <strong>{translatedLabels.validity}:</strong>{" "}
-        {translatedData.soilHealthCard.validityFrom} -{" "}
-        {translatedData.soilHealthCard.validityTo}
-      </p>
+      {renderFieldGroup([
+        { label: translatedLabels.cardNumber, value: translatedData.soilHealthCard.soilHealthCardNo },
+        { label: translatedLabels.validity, value: `${translatedData.soilHealthCard.validityFrom} - ${translatedData.soilHealthCard.validityTo}` },
+      ])}
 
-      <h2 className="text-2xl font-semibold mt-6 mb-4">
+      {/* Soil Sample Details */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
         {translatedLabels.soilSampleDetails}
       </h2>
-      <p>
-        <strong>{translatedLabels.sampleNumber}:</strong>{" "}
-        {translatedData.soilSampleDetails.soilSampleNumber}
-      </p>
-      <p>
-        <strong>{translatedLabels.surveyNumber}:</strong>{" "}
-        {translatedData.soilSampleDetails.surveyNo}
-      </p>
-      <p>
-        <strong>{translatedLabels.farmSize}:</strong>{" "}
-        {translatedData.soilSampleDetails.farmSizeInHector}
-      </p>
-      <p>
-        <strong>{translatedLabels.latitude}:</strong>{" "}
-        {translatedData.soilSampleDetails.geoPositionLatitude}
-      </p>
-      <p>
-        <strong>{translatedLabels.longitude}:</strong>{" "}
-        {translatedData.soilSampleDetails.geoPositionLongitude}
-      </p>
+      {renderFieldGroup([
+        { label: translatedLabels.sampleNumber, value: translatedData.soilSampleDetails.soilSampleNumber },
+        { label: translatedLabels.surveyNumber, value: translatedData.soilSampleDetails.surveyNo },
+        { label: translatedLabels.farmSize, value: translatedData.soilSampleDetails.farmSizeInHector },
+        { label: translatedLabels.latitude, value: translatedData.soilSampleDetails.geoPositionLatitude },
+        { label: translatedLabels.longitude, value: translatedData.soilSampleDetails.geoPositionLongitude },
+      ])}
 
-      <h2 className="text-2xl font-semibold mt-6 mb-4">
+      {/* Soil Test Results */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
         {translatedLabels.soilTestResults}
       </h2>
       {Object.keys(translatedData.soilTestResults).length > 0 ? (
-        Object.entries(translatedData.soilTestResults).map(([key, value]) => (
-          <p key={key}>
-            <strong>{key.replace(/_/g, " ")}:</strong> {value ?? "N/A"}
-          </p>
-        ))
+        renderFieldGroup(
+          Object.entries(translatedData.soilTestResults).map(([key, value]) => ({
+            label: key.replace(/_/g, " "),
+            value: value ?? "N/A",
+          }))
+        )
       ) : (
         <p>{translatedLabels.noTestResults}</p>
       )}
 
-      <h2 className="text-2xl font-semibold mt-6 mb-4">
+      {/* Current Crop */}
+      <h2 className="text-2xl font-semibold mt-6 mb-4 text-blue-600">
         {translatedLabels.currentCrop}
       </h2>
-      <p>{translatedData.currentCrop}</p>
+      <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow-sm mb-6">
+        <p className="text-lg font-semibold text-gray-900 dark:text-white">
+          {translatedData.currentCrop}
+        </p>
+      </div>
 
-      <h2 className="text-2xl font-semibold mt-6 mb-4">
+      {/* Fertilizer Needed */}
+      <h2 className="text-2xl font-semibold mb-4 text-blue-600">
         {translatedLabels.fertilizerNeeded}
       </h2>
       {translatedData.fertilizerNeeded.length > 0 ? (
-        <ul>
-          {translatedData.fertilizerNeeded.map((fertilizer, index) => (
-            <li key={index}>
-              <strong>{fertilizer.name}:</strong> {fertilizer.quantity}
-            </li>
-          ))}
-        </ul>
+        renderFieldGroup(
+          translatedData.fertilizerNeeded.map((item) => ({
+            label: item.name,
+            value: item.quantity,
+          }))
+        )
       ) : (
         <p>{translatedLabels.noFertilizer}</p>
       )}

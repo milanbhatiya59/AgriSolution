@@ -31,7 +31,7 @@ const FarmCard = ({ farm }) => {
   return (
     <div
       onClick={handleCardClick}
-      className="p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+      className="p-6 bg-white dark:bg-gray-700 rounded-xl border-l-4 border-green-600 shadow-md hover:scale-[1.02] transition transform duration-300 cursor-pointer"
     >
       <div className="text-lg font-semibold text-gray-900 dark:text-white">
         🌾 {translatedData.farmID}: {farm._id}

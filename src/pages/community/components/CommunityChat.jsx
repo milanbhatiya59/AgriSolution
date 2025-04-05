@@ -3,6 +3,7 @@ import { useUser } from "@clerk/clerk-react";
 import { getCommunityChats } from "../../../api/getCommunityChatsApi";
 import { createMessageApi } from "../../../api/createMessageApi";
 import { getUser } from "../../../api/getUserApi";
+import { FaUserAlt } from "react-icons/fa";
 
 const CommunityChat = ({ selectedCommunity }) => {
   const [messages, setMessages] = useState([]);
@@ -112,7 +113,7 @@ const CommunityChat = ({ selectedCommunity }) => {
         ) : (
           messages.map((msg, idx) => {
             const isCurrentUser = msg.sender === userMongoId;
-            const avatar = isCurrentUser ? userImage : "/default-avatar.png";
+            const avatar = userImage;
 
             return (
               <div
@@ -121,13 +122,7 @@ const CommunityChat = ({ selectedCommunity }) => {
                   isCurrentUser ? "justify-end" : "justify-start"
                 }`}
               >
-                {!isCurrentUser && (
-                  <img
-                    src={avatar}
-                    alt="Avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                )}
+                {!isCurrentUser && <FaUserAlt />}
 
                 <div
                   className={`px-4 py-2 rounded-2xl shadow-md max-w-xs sm:max-w-sm break-words ${

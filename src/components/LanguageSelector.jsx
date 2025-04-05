@@ -23,13 +23,13 @@ const LanguageSelector = () => {
       <select
         value={language}
         onChange={(e) => setLanguage(e.target.value)}
-        className="px-4 py-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-white transition-colors duration-300 shadow-md hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer"
+        className="px-4 py-2 rounded-md bg-green-300 dark:bg-green-500 text-gray-900 dark:text-white transition-colors duration-300 shadow-md hover:bg-gray-300 dark:hover:bg-gray-700 cursor-pointer"
       >
         {languages.map((lang) => (
           <option
             key={lang.code}
             value={lang.code}
-            className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+            className="bg-green-300 dark:bg-green-500 text-gray-900 dark:text-white"
           >
             {lang.label}
           </option>

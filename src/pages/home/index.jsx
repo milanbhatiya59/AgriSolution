@@ -83,7 +83,7 @@ const HomePage = () => {
               {translatedText.createFarm}
             </button>
           </div>
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
+          <div className="bg-gray-100 dark:bg-gray-900 rounded-xl overflow-hidden">
             <img
               src={bannerImage}
               alt="Welcome Banner"

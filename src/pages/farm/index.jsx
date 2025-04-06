@@ -38,12 +38,11 @@ const FarmPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-8xl mx-auto px-6 py-8 space-y-6">
-
         {/* Header */}
         <div className="relative bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
           <button
             onClick={() => navigate("/")}
-            className="absolute left-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition"
+            className="absolute left-6 top-1/2 transform -translate-y-1/2 px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 hover:scale-105 transition-all"
           >
             Back to home
           </button>
@@ -52,7 +51,6 @@ const FarmPage = () => {
 
         {/* Main Row */}
         <div className="flex flex-row items-start justify-center space-x-6">
-
           {/* FarmDetails - 2/3 */}
           <FarmDetails farmData={farmData} />
 

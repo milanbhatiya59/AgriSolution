@@ -20,13 +20,7 @@ const FormActions = ({ loading }) => {
       <button
         type="submit"
         disabled={loading}
-        className={`px-4 py-2 rounded-lg shadow-md transition text-white 
-          ${
-            loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-600 hover:bg-green-700"
-          }
-        `}
+        className="px-6 py-3 bg-[#65A30D] text-white font-semibold rounded-lg shadow-md hover:bg-[#55890B] hover:scale-105 transition-all"
       >
         {loading ? "Submitting..." : translatedText}
       </button>

@@ -27,7 +27,6 @@ const SoilHealthCardForm = ({ formData, handleChange, loading }) => {
       <h2 className="text-lg font-semibold mb-4">
         {translatedLabels.title || "Soil Health Card"}
       </h2>
-
       {loading ? (
         <div className="flex items-center justify-center py-8">
           <div className="animate-spin rounded-full h-8 w-8 border-t-4 border-green-500 border-solid"></div>
@@ -45,6 +44,11 @@ const SoilHealthCardForm = ({ formData, handleChange, loading }) => {
                 name={`soilHealthCard.${field}`}
                 value={formData.soilHealthCard[field] || ""}
                 onChange={handleChange}
+                min={
+                  field === "ValidityTo"
+                    ? formData.soilHealthCard.ValidityFrom || undefined
+                    : undefined
+                }
                 className="w-full p-2 border rounded focus:bg-green-100 text-black"
               />
             </div>

@@ -37,14 +37,16 @@ const CommunityPage = () => {
         <div className="flex justify-between items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
           <button
             onClick={() => navigate("/")}
-            className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition"
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 hover:scale-105 transition-all"
           >
-            Back
+            Back to Home
           </button>
+
           <h1 className="text-3xl font-bold">{translatedText.community}</h1>
+
           <button
             onClick={() => setShowDialog(true)}
-            className="px-4 py-2 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition"
+            className="px-4 py-2 bg-[#65A30D] text-white font-semibold rounded-lg shadow-md hover:bg-[#55890B] hover:scale-105 transition-all"
           >
             {translatedText.createCommunity}
           </button>

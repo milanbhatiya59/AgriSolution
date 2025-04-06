@@ -2,6 +2,7 @@ import Warnings from "./components/Warnings";
 import Notifications from "./components/Notifications";
 import PestAndDiseaseDetection from "./components/PestAndDiseaseDetection";
 import FarmDetails from "./components/FarmDetails";
+import GovernmentSchemes from "./components/GovernmentSchemes";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getFarmById } from "../../api/getFarmById";
@@ -49,12 +50,9 @@ const FarmPage = () => {
           <h1 className="text-3xl font-bold text-center">{translatedTitle}</h1>
         </div>
 
-        {/* Main Row */}
         <div className="flex flex-row items-start justify-center space-x-6">
-          {/* FarmDetails - 2/3 */}
           <FarmDetails farmData={farmData} />
 
-          {/* Middle Column - Pest + Warnings */}
           <div className="w-1/3 space-y-6">
             <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
               <PestAndDiseaseDetection farmData={farmData} />
@@ -64,9 +62,9 @@ const FarmPage = () => {
             </div>
           </div>
 
-          {/* Right Column - Notifications */}
           <div className="w-1/3 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
             <Notifications id={id} />
+            <GovernmentSchemes farmData={farmData} />
           </div>
         </div>
       </div>

@@ -6,6 +6,8 @@ const SoilHealthCardForm = ({ formData, handleChange, loading }) => {
   const { language } = useLanguage();
   const [translatedLabels, setTranslatedLabels] = useState({});
 
+  console.log(formData.soilHealthCard);
+
   useEffect(() => {
     const translateLabels = async () => {
       const translations = {};

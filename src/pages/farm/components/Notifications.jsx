@@ -85,7 +85,7 @@ const Notifications = ({ id }) => {
   );
 
   return (
-    <div className="p-6 bg-gray-100 dark:bg-gray-900 min-h-screen text-gray-900 dark:text-gray-100">
+    <div className="p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <h2 className="text-3xl font-bold mb-6">{translatedTexts.title}</h2>
 
       <div className="mb-6">

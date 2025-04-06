@@ -18,7 +18,7 @@ const FormActions = () => {
     <div className="col-span-full flex justify-center">
       <button
         type="submit"
-        className="px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition"
+        className="px-6 py-3 bg-[#65A30D] text-white font-semibold rounded-lg shadow-md hover:bg-[#55890B] hover:scale-105 transition-all"
       >
         {translatedText}
       </button>

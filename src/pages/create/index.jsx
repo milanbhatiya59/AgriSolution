@@ -123,15 +123,12 @@ const CreatePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     const finalData = {
       ...formData,
       fertilizerNeeded,
     };
-
     try {
       await createFarm(clerkUserId, finalData);
-      console.log("Farm Created Successfully");
       navigate("/");
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -145,38 +142,42 @@ const CreatePage = () => {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        <div className="flex flex-col md:flex-row items-center bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+        {/* Header */}
+        <div className="flex flex-wrap items-center justify-between gap-4 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
           <button
             onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-bold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 transition"
+            className="px-4 py-2 bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-lg shadow-md hover:bg-gray-400 dark:hover:bg-gray-600 hover:scale-105 transition-all"
           >
             {translatedTexts.backToHome}
           </button>
 
-          <div className="flex-1 text-center text-lg font-semibold">
+          <div className="text-lg font-semibold text-center w-full md:w-auto">
             {translatedTexts.createFarm}
           </div>
 
-          {image && (
-            <button
-              onClick={handleDeleteImage}
-              className="px-4 py-2 bg-red-600 text-white font-bold rounded-lg shadow-md hover:bg-red-700 transition mx-2"
-            >
-              {translatedTexts.deleteSoilCard}
-            </button>
-          )}
+          <div className="flex gap-2">
+            {image && (
+              <button
+                onClick={handleDeleteImage}
+                className="px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 hover:scale-105 transition-all"
+              >
+                {translatedTexts.deleteSoilCard}
+              </button>
+            )}
 
-          <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 font-bold rounded-lg shadow-md hover:bg-blue-700 transition">
-            {translatedTexts.uploadSoilCard}
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageUpload}
-            />
-          </label>
+            <label className="cursor-pointer bg-blue-600 text-white px-4 py-2 font-semibold rounded-lg shadow-md hover:bg-blue-700 hover:scale-105 transition-all">
+              {translatedTexts.uploadSoilCard}
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+            </label>
+          </div>
         </div>
 
+        {/* Image Preview */}
         {image && (
           <div className="flex justify-center">
             <img
@@ -187,20 +188,15 @@ const CreatePage = () => {
           </div>
         )}
 
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
+          className="grid grid-cols-1 gap-6 bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg"
         >
           <SoilHealthCardForm formData={formData} handleChange={handleChange} />
           <FarmersDetailsForm formData={formData} handleChange={handleChange} />
-          <SoilSampleDetailsForm
-            formData={formData}
-            handleChange={handleChange}
-          />
-          <SoilTestResultsForm
-            formData={formData}
-            handleChange={handleChange}
-          />
+          <SoilSampleDetailsForm formData={formData} handleChange={handleChange} />
+          <SoilTestResultsForm formData={formData} handleChange={handleChange} />
           <CropSelection
             formData={formData}
             handleChange={handleChange}

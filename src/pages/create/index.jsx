@@ -22,6 +22,8 @@ const CreatePage = () => {
   const [cropRecommendations, setCropRecommendations] = useState([]);
   const [fertilizerNeeded, setFertilizerNeeded] = useState([]);
   const [translatedTexts, setTranslatedTexts] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [loadingSoilCard, setLoadingSoilCard] = useState(false);
 
   const [formData, setFormData] = useState({
     soilHealthCard: {
@@ -93,12 +95,15 @@ const CreatePage = () => {
     const imageFormData = new FormData();
     imageFormData.append("soilcard", file);
     try {
+      setLoadingSoilCard(true); // ✅ show loading spinner
       const data = await getSoilCardApiData(imageFormData);
       setFormData((prev) => ({ ...prev, ...data, currentCrop: "" }));
       setCropRecommendations(data.cropRecommendations || []);
       setFertilizerNeeded([]);
     } catch (error) {
       console.error("Error processing image:", error);
+    } finally {
+      setLoadingSoilCard(false); // ✅ hide spinner
     }
   };
 
@@ -123,6 +128,7 @@ const CreatePage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
 
     const finalData = {
       ...formData,
@@ -131,10 +137,11 @@ const CreatePage = () => {
 
     try {
       await createFarm(clerkUserId, finalData);
-      console.log("Farm Created Successfully");
       navigate("/");
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -191,7 +198,11 @@ const CreatePage = () => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md"
         >
-          <SoilHealthCardForm formData={formData} handleChange={handleChange} />
+          <SoilHealthCardForm
+            formData={formData}
+            handleChange={handleChange}
+            loading={loadingSoilCard}
+          />
           <FarmersDetailsForm formData={formData} handleChange={handleChange} />
           <SoilSampleDetailsForm
             formData={formData}
@@ -206,7 +217,7 @@ const CreatePage = () => {
             handleChange={handleChange}
             cropRecommendations={cropRecommendations}
           />
-          <FormActions handleSubmit={handleSubmit} />
+          <FormActions handleSubmit={handleSubmit} loading={loading} />
         </form>
       </div>
     </div>

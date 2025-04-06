@@ -2,6 +2,7 @@ import ThemeToggleButton from "./ThemeToggleButton";
 import LanguageSelector from "./LanguageSelector";
 import AuthButton from "./AuthButton";
 import CommunityChatButton from "./CommunityChatButton";
+import DownloadSampleSoilCardButton from "./DownloadSampleSoilCardButton";
 
 const Navbar = () => {
   return (
@@ -16,6 +17,7 @@ const Navbar = () => {
           <ThemeToggleButton />
           <LanguageSelector />
           <CommunityChatButton />
+          <DownloadSampleSoilCardButton />
         </div>
       </div>
     </nav>

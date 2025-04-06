@@ -7,10 +7,19 @@ const SoilTestResultsForm = ({ formData, handleChange }) => {
   const [translatedLabels, setTranslatedLabels] = useState({});
   const [translatedTitle, setTranslatedTitle] = useState("Soil Test Results");
 
+  // List of required fields
+  const requiredFields = [
+    "pH",
+    "EC",
+    "OrganicCarbonOC",
+    "AvailableNitrogenN",
+    "AvailablePhosphorusP",
+    "AvailablePotassiumK"
+  ];
+
   useEffect(() => {
     const translateLabels = async () => {
       const translations = {};
-
       for (const field of Object.keys(formData.soilTestResults)) {
         translations[field] = await translateText(
           field.replace(/([A-Z])/g, " $1"),
@@ -44,6 +53,7 @@ const SoilTestResultsForm = ({ formData, handleChange }) => {
               value={formData.soilTestResults[field] || ""}
               onChange={handleChange}
               className="w-full p-2 border rounded focus:bg-green-100 text-black"
+              required={requiredFields.includes(field)}  // 🔥 This line ensures required fields show alert
             />
           </div>
         ))}

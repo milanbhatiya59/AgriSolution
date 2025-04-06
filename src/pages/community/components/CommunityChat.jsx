@@ -87,12 +87,11 @@ const CommunityChat = ({ selectedCommunity }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 h-full min-h-[80vh] flex flex-col">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">💬 {selectedCommunity.name} Chat</h2>
+        <h2 className="text-2xl font-bold flex items-center gap-2">
+          💬 {selectedCommunity.name} Chat
+        </h2>
         <span className="text-sm text-gray-500 dark:text-gray-400">
-          Admin:{" "}
-          <span className="font-semibold">
-            {user?.firstName} {user?.lastName}
-          </span>
+          Admin: <span className="font-semibold">{user?.firstName} {user?.lastName}</span>
         </span>
       </div>
 
@@ -100,10 +99,7 @@ const CommunityChat = ({ selectedCommunity }) => {
         {loading ? (
           <div className="space-y-2 animate-pulse">
             {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="w-2/3 h-5 bg-gray-300 dark:bg-gray-600 rounded"
-              />
+              <div key={i} className="w-2/3 h-5 bg-gray-300 dark:bg-gray-600 rounded" />
             ))}
           </div>
         ) : messages.length === 0 ? (
@@ -116,23 +112,22 @@ const CommunityChat = ({ selectedCommunity }) => {
             const avatar = userImage;
 
             return (
-              <div
-                key={idx}
-                className={`flex items-end gap-2 ${
-                  isCurrentUser ? "justify-end" : "justify-start"
-                }`}
-              >
-                {!isCurrentUser && <FaUserAlt />}
+              <div key={idx} className={`flex items-end gap-2 ${isCurrentUser ? "justify-end" : "justify-start"}`}>
+                {!isCurrentUser && (
+                  <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow">
+                    <FaUserAlt />
+                  </div>
+                )}
 
                 <div
-                  className={`px-4 py-2 rounded-2xl shadow-md max-w-xs sm:max-w-sm break-words ${
+                  className={`px-4 py-2 rounded-2xl max-w-xs sm:max-w-sm shadow-md transition-all duration-300 ${
                     isCurrentUser
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-300 dark:bg-gray-700 text-black dark:text-white"
+                      ? "bg-blue-600 text-white rounded-br-none"
+                      : "bg-gray-200 dark:bg-gray-700 text-black dark:text-white rounded-bl-none"
                   }`}
                 >
                   <p className="text-sm">{msg.content}</p>
-                  <div className="text-xs text-gray-200 mt-1 text-right">
+                  <div className="text-xs mt-1 text-right text-gray-300 dark:text-gray-400">
                     {isCurrentUser ? "You" : msg.senderName || "User"} ·{" "}
                     {new Date(msg.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
@@ -145,7 +140,7 @@ const CommunityChat = ({ selectedCommunity }) => {
                   <img
                     src={avatar}
                     alt="Avatar"
-                    className="w-8 h-8 rounded-full object-cover"
+                    className="w-8 h-8 rounded-full object-cover shadow-md"
                   />
                 )}
               </div>
@@ -171,13 +166,15 @@ const CommunityChat = ({ selectedCommunity }) => {
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           disabled={sending}
-          className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-black dark:text-white disabled:opacity-70"
+          className="flex-1 px-4 py-2 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
         />
         <button
           type="submit"
           disabled={sending}
-          className={`px-4 py-2 bg-blue-500 text-white rounded-lg ${
-            sending ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-600"
+          className={`px-5 py-2 rounded-full text-white font-medium transition-all ${
+            sending
+              ? "bg-blue-300 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
           }`}
         >
           {sending ? "..." : "Send"}

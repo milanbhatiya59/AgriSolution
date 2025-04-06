@@ -38,6 +38,11 @@ const SoilHealthCardForm = ({ formData, handleChange }) => {
               name={`soilHealthCard.${field}`}
               value={formData.soilHealthCard[field] || ""}
               onChange={handleChange}
+              min={
+                field === "ValidityTo"
+                  ? formData.soilHealthCard.ValidityFrom || undefined
+                  : undefined
+              }
               className="w-full p-2 border rounded focus:bg-green-100 text-black"
             />
           </div>

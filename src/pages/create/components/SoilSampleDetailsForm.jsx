@@ -39,6 +39,11 @@ const SoilSampleDetailsForm = ({ formData, handleChange }) => {
               value={formData.soilSampleDetails[field] || ""}
               onChange={handleChange}
               className="w-full p-2 border rounded focus:bg-green-100 text-black"
+              required={
+                field === "FarmSizeInHector" ||
+                field === "GeoPositionLatitude" ||
+                field === "GeoPositionLongitude"
+              }
             />
           </div>
         ))}

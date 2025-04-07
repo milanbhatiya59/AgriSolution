@@ -130,4 +130,33 @@ npm run dev
 
 Now open http://localhost:5173 to use the app.
 
+---
+## Screenshots
+
+### Login Page
+![Login](./images/login.png)
+
+### Home Page
+![Home](./images/home.png)
+
+### Dark Mode
+![Dark Mode](./images/darkMode.png)
+
+### Add New Farm 
+![Add New Farm](./images/createFarm.png)
+
+### Community Chat
+![Community Chat](./images/community.png)
+
+### Farm Card 
+##### Regular Notifications/ Updates, Government Schemens, Pest & weed detection
+![Farm Card](./images/farmCard.png)
+
+### Multi Lingual Support
+![Language](./images/language_Bengali.png)
+
+
+---
+
+For further details, please contact the project contributors.
 

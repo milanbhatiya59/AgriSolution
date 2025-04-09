@@ -51,7 +51,7 @@ Before you begin, ensure you have met the following requirements:
 
 - **Node.js** (v16 or above)
 - **MongoDB** (local or cloud instance like MongoDB Atlas)
-- **npm** or **yarn** for managing packages
+- **npm** for managing packages
 - **Clerk** account for authentication
 - **Google Cloud Account** for Gemini API and Google Translate API
 - Basic knowledge of React and Node.js
